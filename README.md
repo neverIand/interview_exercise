@@ -110,7 +110,7 @@ You can create a conversation through the [Swagger UI](http://localhost:3000/api
 The code in each module is separated into 3 layers
 1) controllers and/or resolvers: These provide the external interfaces for the REST and Graphql interfaces respectively, and passes the request to the logic layer
 2) logic: This implements common business rules, and can make requests to other modules and the repository layer to fulfil the request.
-3) repository: This manages hwo data is stored in the module. It should only be used directly by the logic layer.
+3) repository: This manages how data is stored in the module. It should only be used directly by the logic layer.
 
 
 my-app/
