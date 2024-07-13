@@ -1,0 +1,68 @@
+# TODOs for message tagging
+
+## Possible feature requirements:
+
+For now, these are the MVP features, there will be much more in terms of future improvements (see [improvements or alternatives](#some-improvements-or-alternatives))
+
+1. Add tags to a message when writing a message
+2. Update a tag/tags of an existing message
+3. Search for messages that matches given tags
+
+## Possible implementation needed (TODO: steps to take):
+
+1. Update the function that creates messages for enabling tags creation
+    - could use `joi` for validation (it's in dependency)
+
+2. A function that allows users to update (including add/delete) tags for a message after it's created
+
+3. A function that returns messages that matches the given tags
+
+## Testing:
+
+1. Unit Testing
+    - Tests for adding tags to a message (e.g. 0 to many tags, tags should be validated)
+    - Tests for updating tags of a message (including update and remove)
+    - Tests for searching for messages that match given tag/tags
+        - possibly for different time periods
+    - Note that tests above includes all tests needed for different layers, e.g. resolvers, logics, data
+
+2. Integration Testing
+    - There doesn't seem to be dedicated integration tests, but if it's needed, then the entire flow of adding and updating tags as well as searching messages by tags could be tested.
+
+3. E2E Testing
+    - Test the scenarios where the user starts an conversation and add/update message tags as well as searching messages by tags through the GraphQL interface
+
+## Potential Problems:
+
+1. Data Consistency: Ensuring that tags are consistently applied and updated across the system.
+2. Performance: Searching by tags can be performance-intensive if not properly indexed or if the dataset is large. (imaging there's hundreds of millions or even more messages, each of which has multiple tags)
+    - Index the tags field in the database
+    - Caching (also see [improvements](#some-improvements-or-alternatives))
+3. Validation: e.g., allowed characters, maximum length, etc.
+4. Concurrency: Handling concurrent updates to message tags correctly.
+
+## Some improvements or alternatives:
+
+- Messages created in a tagged conversation could automatically inherit the tags of this conversation
+	- Could limit the scope of searching by searching for those conversation first (aside from timeframe)
+
+- Default limit of the message searching scope (e.g. messages over the past week/month/year, etc.)
+    - Can help in reducing the search space, improving performance.
+
+- Tag Suggestions: Auto-suggestions for tags based on previous conversations or tags in the system.
+    - Again, this may require a robust and performant searching mechanism
+    - Could even be ML-based
+
+- Caching: cache frequent tag searches to improve performance
+
+- Bulk editing: update multiple tags for multiple messages
+    - Could be combined with tag suggestions e.g. suggest some previous tags in this conversation
+
+- More fined-grained access-control may be required for updating tags, e.g. By default only people involved in the conversation can update tags, and:
+    - Such access could also be managed, for example, by the creator of the conversation
+    - Or, managed by each individual user to determine whether the tags can be managed by both side of the conversation or only themselves
+
+- i18N support
+    - The existing `SafeguardingService` seems to handle the text sanitizitation and language detection for messages but does not handle internationalisation (and offensive words censor) for conversation tag names
+    
+

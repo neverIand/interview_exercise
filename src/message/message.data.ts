@@ -90,6 +90,7 @@ export class MessageData {
     // TODO allow a message to be marked as deleted
     const deletedMessage = await this.chatMessageModel.findByIdAndUpdate(
       messageId,
+      // replace the message content
       { text: 'This message has been deleted', deleted: true },
       { new: true },
     );
