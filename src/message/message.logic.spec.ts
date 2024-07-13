@@ -59,7 +59,10 @@ import {
 } from '../conversation/models/lastMessage.dto';
 import { Permission } from '../conversation/models/Permission.dto';
 import { LastReadInput } from '../conversation/models/LastReadInput.dto';
-import { Tag } from '../conversation/models/CreateChatConversation.dto';
+import {
+  Tag,
+  TagType,
+} from '../conversation/models/CreateChatConversation.dto';
 
 const UNAUTHORISED_USER = new ObjectId('321b1a570ff321b1a570ff01');
 const validUser: IAuthenticatedUser = {
@@ -550,7 +553,6 @@ describe('MessageLogic', () => {
     send = jest.fn();
   }
 
-
   class MockUserBlocksLogic implements IUserBlocksLogic {
     getBlockedUsers(
       userIds: ObjectID[],
@@ -644,6 +646,50 @@ describe('MessageLogic', () => {
       );
 
       expect(conversationChannel.send).toHaveBeenCalledTimes(1);
+    });
+
+    describe('create', () => {
+      it('can create a new message with tags and pusher implementation', async () => {
+        // TODO for now it uses the same Tag structure with conversation
+        const tags = [
+          { id: 'tag1', type: TagType.subTopic },
+          { id: 'tag2', type: TagType.subTopic },
+        ];
+
+        jest.spyOn(messageData, 'create');
+
+        await messageLogic.create(
+          { text: 'This is my message text', conversationId /* tags */ },
+          { ...validUser, userId: senderId },
+        );
+
+        const sendMessageEvent = new SendMessageEvent({
+          text: 'clean message',
+          created: new Date('2018-05-11T17:47:40.893Z'),
+          sender: {
+            id: '5fe0cce861c8ea54018385af',
+            firstName: 'Bob',
+            accountRole: validUser.accountRole,
+          },
+          id: messageId,
+          deleted: false,
+          resolved: false,
+          likes: [],
+          likesCount: 0,
+          isSenderBlocked: false,
+          // tags,
+        });
+
+        expect(safeguardingService.clean).toHaveBeenCalledTimes(1);
+        expect(safeguardingService.clean).toBeCalledWith('Message 1');
+
+        expect(conversationChannel.send).toHaveBeenCalledWith(
+          sendMessageEvent,
+          conversationId.toHexString(),
+        );
+
+        expect(conversationChannel.send).toHaveBeenCalledTimes(1);
+      });
     });
 
     it('can create a new reply message with pusher implementation', async () => {
