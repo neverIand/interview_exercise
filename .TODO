@@ -54,6 +54,10 @@ Note to self: Remember to update the mock implementation as well
 
 ## Some improvements or alternatives:
 
+- Use a different data structure for Tags (or at least message tags)
+    - Use another type of id instead of using tag name as id directly
+    - Possibly better for adding more features. Current structure are quite limited (e.g. can only add more TagType enum)
+
 - Limit the number of tags a message can have (e.g. 3)
     - Can help in reducing the search space, improving performance.
 
