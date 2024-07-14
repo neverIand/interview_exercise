@@ -112,7 +112,7 @@ export class MessageLogic implements IMessageLogic {
 
     // Clean the tags before creating the message
     const cleanedTags = this.cleanMessageTags(messageDto.tags);
-    
+
     const conversationId = messageDto.conversationId.toHexString();
     const [message, sender, conversation] = await Promise.all([
       this.messageData.create({ ...messageDto, tags: cleanedTags }, userId),
@@ -712,5 +712,32 @@ export class MessageLogic implements IMessageLogic {
     }
 
     return pollOption;
+  }
+
+  async updateTags(
+    chatMessageId: ObjectID,
+    newTags: TagInput[],
+    authenticatedUser: IAuthenticatedUser,
+  ): Promise<ChatMessage> {
+    // Check if the user is authorized to update the message
+    await this.throwForbiddenErrorIfNotAuthorized(
+      authenticatedUser,
+      chatMessageId,
+      Action.updateMessage,
+    );
+
+    // Retrieve the message
+    const message = await this.messageData.getMessage(
+      chatMessageId.toHexString(),
+    );
+
+    // Update the tags
+    message.tags = newTags;
+
+    // Save the updated message
+    return await this.messageData.updateTags(
+      chatMessageId,
+      newTags,
+    );
   }
 }

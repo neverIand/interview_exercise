@@ -6,7 +6,11 @@ import {
   chatMessageToObject,
   ChatMessageModel,
 } from './models/message.model';
-import { ChatMessage, PaginatedChatMessages } from './models/message.entity';
+import {
+  ChatMessage,
+  PaginatedChatMessages,
+  TagInput,
+} from './models/message.entity';
 import { MessageDto, GetMessageDto } from './models/message.dto';
 import { ObjectID } from 'mongodb';
 import { createRichContent } from './utils/message.helper';
@@ -93,7 +97,7 @@ export class MessageData {
   }
 
   async delete(messageId: ObjectID): Promise<ChatMessage> {
-    // TODO allow a message to be marked as deleted
+    // Part 2: allow a message to be marked as deleted
     const deletedMessage = await this.chatMessageModel.findByIdAndUpdate(
       messageId,
       // replace the message content
@@ -371,5 +375,23 @@ export class MessageData {
     }
 
     return chatMessageToObject(updatedResult);
+  }
+
+  async updateTags(
+    messageId: ObjectID,
+    newTags: TagInput[],
+  ): Promise<ChatMessage> {
+    // Update the tags in the database
+    const updatedMessage = await this.chatMessageModel.findByIdAndUpdate(
+      messageId,
+      { tags: newTags },
+      { new: true },
+    );
+
+    if (!updatedMessage) {
+      throw new Error('Message not found');
+    }
+
+    return updatedMessage;
   }
 }

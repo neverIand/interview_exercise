@@ -42,7 +42,7 @@ import {
   UserBlockScope,
   UserBlockDTo,
 } from '../user-blocks/models/user-blocks.model';
-import { PaginatedChatMessages } from './models/message.entity';
+import { PaginatedChatMessages, TagInput } from './models/message.entity';
 import {
   ConversationDTO,
   ConversationLogic,
@@ -415,6 +415,22 @@ describe('MessageLogic', () => {
       return Promise.resolve(
         this.getMockMessage(messageId.toHexString(), userId.toHexString()),
       );
+    }
+
+    updateTags(messageId: ObjectId, newTags: TagInput[]) {
+      return {
+        _id: messageId,
+        text: 'Message 1',
+        senderId,
+        conversationId,
+        created: new Date('2018-05-11T17:47:40.893Z'),
+        sender: { id: '5fe0cce861c8ea54018385af' },
+        conversation: { id: '5fe0cce861c8ea54018385ae' },
+        id: messageId,
+        deleted: false,
+        resolved: false,
+        tags: newTags,
+      };
     }
   }
 
@@ -1505,17 +1521,7 @@ describe('MessageLogic', () => {
 
     it('should be able to update tags', async () => {
       const mockMessage = {
-        text: 'Hello world',
-        senderId,
-        conversationId,
-        created: new Date('2018-05-11T17:47:40.893Z'),
-        sender: { id: '5fe0cce861c8ea54018385af' },
-        conversation: { id: '5fe0cce861c8ea54018385ae' },
-        id: messageId,
-        deleted: false,
-        resolved: false,
-        likes: [],
-        likesCount: 0,
+        ...mockCreatedMessage,
         tags: [{ id: 'tag1', type: TagType.subTopic }],
       };
 
