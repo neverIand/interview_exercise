@@ -157,6 +157,7 @@ type Mutation {
   pinMessageInConversation(pinMessageDTO: pinMessageDTO!): ChatConversation!
   unpinMessageInConversation(unpinMessageDTO: unpinMessageDTO!): ChatConversation!
   sendConversationMessage(messageDto: MessageDto!): ChatMessage!
+  updateMessageTags(updateMessageTagsDto: UpdateMessageTagsDto!): ChatMessage!
   deleteConversationMessage(deleteMessageDto: DeleteMessageDto!): ChatMessage!
   resolveConversationMessage(resolveMessageDto: ResolveMessageDto!): ChatMessage!
   unresolveConversationMessage(resolveMessageDto: ResolveMessageDto!): ChatMessage!
@@ -235,6 +236,11 @@ input PollOptionDto {
 input TagInput {
   id: ID!
   type: String!
+}
+
+input UpdateMessageTagsDto {
+  messageId: ObjectId!
+  tags: [TagInput!]!
 }
 
 input DeleteMessageDto {

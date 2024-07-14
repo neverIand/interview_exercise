@@ -124,6 +124,15 @@ export class MessageDto {
   tags?: TagInput[];
 }
 
+@InputType()
+export class UpdateMessageTagsDto {
+  @Field()
+  messageId: ObjectID;
+
+  @Field(() => [TagInput])
+  tags: TagInput[];
+}
+
 // TODO Min - Max on limit
 @InputType()
 export class GetMessageDto {
