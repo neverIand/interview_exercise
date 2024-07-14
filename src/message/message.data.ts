@@ -384,7 +384,8 @@ export class MessageData {
     // Update the tags in the database
     const updatedMessage = await this.chatMessageModel.findByIdAndUpdate(
       messageId,
-      { tags: newTags },
+      // in case tags field does not exist before
+      { $set: { tags: newTags } },
       { new: true },
     );
 

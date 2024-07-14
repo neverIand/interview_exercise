@@ -1,6 +1,6 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ObjectID } from 'mongodb';
+import { ObjectID, ObjectId } from 'mongodb';
 import { MessageData } from './message.data';
 import { ChatMessageModel, ChatMessageSchema } from './models/message.model';
 
@@ -83,13 +83,16 @@ describe('MessageData', () => {
       });
     });
 
-    it.only('successfully creates a message with tags', async () => {
+    it('successfully creates a message with tags', async () => {
       const conversationId = new ObjectID();
       const message = await messageData.create(
         {
           conversationId,
           text: 'Hello world with tags',
-          tags: [{ id: 'tag1', type: TagType.subTopic },{ id: 'tag2', type: TagType.subTopic }],
+          tags: [
+            { id: 'tag1', type: TagType.subTopic },
+            { id: 'tag2', type: TagType.subTopic },
+          ],
         },
         senderId,
       );
@@ -105,7 +108,10 @@ describe('MessageData', () => {
         conversation: { id: conversationId.toHexString() },
         likesCount: 0,
         sender: { id: senderId.toHexString() },
-        tags: [{ id: 'tag1', type: TagType.subTopic },{ id: 'tag2', type: TagType.subTopic }],
+        tags: [
+          { id: 'tag1', type: TagType.subTopic },
+          { id: 'tag2', type: TagType.subTopic },
+        ],
       });
     });
   });
@@ -160,5 +166,49 @@ describe('MessageData', () => {
     });
   });
 
-  // TODO: test case for updateTags
+  describe('updateTags', () => {
+    it('successfully updates tags for a message', async () => {
+      const conversationId = new ObjectID();
+      const oldTags = [{ id: 'tag1', type: TagType.subTopic }];
+      const message = await messageData.create(
+        {
+          conversationId,
+          text: 'Message with a tag',
+          tags: oldTags,
+        },
+        senderId,
+      );
+
+      expect(message.tags).toEqual(oldTags);
+
+      // expect(message.tags).toEqual(
+      //   expect.arrayContaining([{ id: 'tag1', type: TagType.subTopic }]),
+      // );
+
+      const updatedTags = [
+        { id: 'tag2', type: TagType.subTopic },
+        { id: 'tag3', type: TagType.subTopic },
+      ];
+
+      const updatedMessage = await messageData.updateTags(
+        new ObjectId(message.id),
+        updatedTags,
+      );
+
+      // ! I'm pretty sure these two are equal but somehow I'm constantly getting `TypeError: 'caller', 'callee', and 'arguments' properties may not be accessed on strict mode functions or the arguments objects for calls to them` - various potential causes and solutions online, none of them applicable to my knowledge.
+      // ! Workaround:
+      expect(JSON.stringify(updatedMessage.tags)).toEqual(
+        JSON.stringify(updatedTags),
+      );
+
+      // expect(updatedMessage.tags).toEqual(
+      //   expect.arrayContaining(updatedTags),
+      // );
+
+      const retrievedMessage = await messageData.getMessage(
+        message.id.toHexString(),
+      );
+      expect(retrievedMessage.tags).toEqual(updatedTags);
+    });
+  });
 });
