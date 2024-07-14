@@ -6,6 +6,7 @@ import { ChatMessageModel, ChatMessageSchema } from './models/message.model';
 
 import { ConfigManagerModule } from '../configuration/configuration-manager.module';
 import { getTestConfiguration } from '../configuration/configuration-manager.utils';
+import { TagType } from '../conversation/models/CreateChatConversation.dto';
 
 const id = new ObjectID('5fe0cce861c8ea54018385af');
 const conversationId = new ObjectID();
@@ -81,6 +82,32 @@ describe('MessageData', () => {
         sender: { id: senderId.toHexString() },
       });
     });
+
+    it.only('successfully creates a message with tags', async () => {
+      const conversationId = new ObjectID();
+      const message = await messageData.create(
+        {
+          conversationId,
+          text: 'Hello world with tags',
+          tags: [{ id: 'tag1', type: TagType.subTopic },{ id: 'tag2', type: TagType.subTopic }],
+        },
+        senderId,
+      );
+
+      expect(message).toMatchObject({
+        likes: [],
+        resolved: false,
+        deleted: false,
+        reactions: [],
+        text: 'Hello world with tags',
+        senderId: senderId,
+        conversationId: conversationId,
+        conversation: { id: conversationId.toHexString() },
+        likesCount: 0,
+        sender: { id: senderId.toHexString() },
+        tags: [{ id: 'tag1', type: TagType.subTopic },{ id: 'tag2', type: TagType.subTopic }],
+      });
+    });
   });
 
   describe('get', () => {
@@ -132,4 +159,6 @@ describe('MessageData', () => {
       }).rejects.toThrow('The message to delete does not exist');
     });
   });
+
+  // TODO: test case for updateTags
 });
