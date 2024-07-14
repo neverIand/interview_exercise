@@ -84,22 +84,24 @@ export class PermissionsService {
     action: Action;
   }): Promise<boolean> {
     // TODO
-    const conversations = await this.conversationData.getConversationsByTags(
-      tags,
-    );
+    // const conversations = await this.conversationData.getConversationsByTags(
+    //   tags,
+    // );
 
-    if (conversations.length === 0) {
-      return false;
-    }
+    // if (conversations.length === 0) {
+    //   return false;
+    // }
 
-    const abilities = await Promise.all(
-      conversations.map((conversation) =>
-        this.abilityFactory.factory(user, conversation),
-      ),
-    );
+    // const abilities = await Promise.all(
+    //   conversations.map((conversation) =>
+    //     this.abilityFactory.factory(user, conversation),
+    //   ),
+    // );
 
-    return abilities.some((ability) =>
-      ability.can(action, subject(Subject.user, this.stringifyUser(user))),
-    );
+    // return abilities.some((ability) =>
+    //   ability.can(action, subject(Subject.user, this.stringifyUser(user))),
+    // );
+
+    return false
   }
 }

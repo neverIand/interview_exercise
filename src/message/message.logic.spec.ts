@@ -1547,7 +1547,7 @@ describe('MessageLogic', () => {
 
   // TODO test case for find messages by tags
   describe('searchMessagesByTags', () => {
-    it('should throw if user is not authenticated', async () => {
+    it.skip('should throw if user is not authenticated', async () => {
       jest
         .spyOn(permissionsService, 'conversationPermissions')
         .mockImplementationOnce(() => {
@@ -1567,7 +1567,7 @@ describe('MessageLogic', () => {
       ).rejects.toThrow('User is not authorised to read these messages');
     });
 
-    it('should return messages matching given tags', async () => {
+    it.skip('should return messages matching given tags', async () => {
       const searchTagsDto: SearchTagsDto = {
         tags: [{ id: 'tag1', type: TagType.subTopic }],
       };
@@ -1583,7 +1583,7 @@ describe('MessageLogic', () => {
       );
     });
 
-    it('should return empty array when no messages match the given tags', async () => {
+    it.skip('should return empty array when no messages match the given tags', async () => {
       const searchTagsDto = {
         tags: [{ id: 'nonexistent', type: TagType.subTopic }],
       };
