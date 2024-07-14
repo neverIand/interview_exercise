@@ -72,4 +72,49 @@ describe('SafeguardingService', () => {
       expect(service.clean(message)).toEqual('');
     });
   });
+
+  describe('cleanTagId', () => {
+    it('should replace the bad word with 🤬', () => {
+      const tagId = 'fucktesttag';
+      expect(service.cleanTagId(tagId)).toEqual('🤬testtag');
+    });
+
+    it('should be case insensitive', () => {
+      const tagId = 'FuCKtesttag';
+      expect(service.cleanTagId(tagId)).toEqual('🤬testtag');
+    });
+
+    it('should replace all bad words with 🤬', () => {
+      const tagId = 'fucktesttagfuck';
+      expect(service.cleanTagId(tagId)).toEqual('🤬testtag🤬');
+    });
+
+    it('should remove all spaces in the tag', () => {
+      const tagId = ' test tag ';
+      expect(service.cleanTagId(tagId)).toEqual('testtag');
+    });
+
+    it('should trim tag longer than 50 characters', () => {
+      const tagId =
+        'NeverGonnaGiveYouUpNeverGonnaLetYouDownNeverGonnaRunAroundAndDesertYou';
+      expect(service.cleanTagId(tagId)).toEqual(
+        'nevergonnagiveyouupnevergonnaletyoudownnevergonnar',
+      );
+    });
+
+    it('should remove non English characters', () => {
+      const tagId = '你好testtag';
+      expect(service.cleanTagId(tagId)).toEqual('testtag');
+    });
+
+    it('Remove any leading or trailing hyphens or underscores', () => {
+      const tagId = '_-testtag-_';
+      expect(service.cleanTagId(tagId)).toEqual('testtag');
+    });
+
+    it('return null if the tag is empty', () => {
+      const tagId = '';
+      expect(service.cleanTagId(tagId)).toEqual(null);
+    });
+  });
 });

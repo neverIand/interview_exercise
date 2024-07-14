@@ -124,6 +124,7 @@ export class MessageDto {
   tags?: TagInput[];
 }
 
+@InputType()
 export class SearchTagsDto {
   @Field(() => [TagInput])
   tags: TagInput[];

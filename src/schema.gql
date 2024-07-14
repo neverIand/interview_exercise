@@ -141,9 +141,19 @@ type ConversationInbox {
 
 type Query {
   getChatConversation(id: String!): ChatConversation!
+  searchMessagesByTags(searchTagsDto: SearchTagsDto!): [ChatMessage!]!
   getMessagesForChatConversation(getMessageDto: GetMessageDto!): [ChatMessage!]! @deprecated(reason: "This query has now been deprecated, please use getChatConversationMessages")
   getChatConversationMessages(getMessageDto: GetMessageDto!): PaginatedChatMessages!
   conversationInboxDoNotUse: [ConversationInbox!]! @deprecated(reason: "Do not use query. See implementation for more details.")
+}
+
+input SearchTagsDto {
+  tags: [TagInput!]!
+}
+
+input TagInput {
+  id: ID!
+  type: String!
 }
 
 input GetMessageDto {
@@ -231,11 +241,6 @@ input PollDto {
 input PollOptionDto {
   option: String!
   votes: [ObjectId!] = []
-}
-
-input TagInput {
-  id: ID!
-  type: String!
 }
 
 input UpdateMessageTagsDto {
