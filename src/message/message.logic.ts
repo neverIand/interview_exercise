@@ -720,9 +720,9 @@ export class MessageLogic implements IMessageLogic {
     authenticatedUser: IAuthenticatedUser,
   ):Promise<ChatMessage[]> {
     // Check if the user is authorized to search messages
-    const isAuthorized = await this.permissions.conversationPermissions({ // TODO a permission for tags
+    const isAuthorized = await this.permissions.tagPermissions({ 
       user: authenticatedUser,
-      tags, // TODO
+      tags, 
       action: Action.readConversation,
     });
 

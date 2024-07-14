@@ -391,4 +391,6 @@ describe('PermissionsService', () => {
       });
     });
   });
+
+  // TODO test cases for tagPermissions
 });

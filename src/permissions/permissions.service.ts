@@ -7,6 +7,7 @@ import { ConversationData } from '../conversation/conversation.data';
 import { MessageData } from '../message/message.data';
 import { AbilityFactory } from './ability-factory';
 import { Action, Subject } from './models/permissions.model';
+import { TagInput } from '../message/models/message.entity';
 
 type AuthenticatedUser = {
   userId: string;
@@ -71,5 +72,34 @@ export class PermissionsService {
     );
 
     return ability.can(action, subject(Subject.user, this.stringifyUser(user)));
+  }
+
+  async tagPermissions({
+    user,
+    tags,
+    action,
+  }: {
+    user: IAuthenticatedUser;
+    tags: TagInput[];
+    action: Action;
+  }): Promise<boolean> {
+    // TODO
+    const conversations = await this.conversationData.getConversationsByTags(
+      tags,
+    );
+
+    if (conversations.length === 0) {
+      return false;
+    }
+
+    const abilities = await Promise.all(
+      conversations.map((conversation) =>
+        this.abilityFactory.factory(user, conversation),
+      ),
+    );
+
+    return abilities.some((ability) =>
+      ability.can(action, subject(Subject.user, this.stringifyUser(user))),
+    );
   }
 }
