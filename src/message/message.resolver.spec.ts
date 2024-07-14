@@ -202,6 +202,44 @@ describe('MessageResolver', () => {
       return Promise.resolve([]);
     }
 
+    // TODO search result may require pagination as well
+    searchMessagesByTags(
+      tags: TagInput[],
+      authenticatedUser?: IAuthenticatedUser,
+    ): Promise<ChatMessage[]> {
+      const tagSet = new Set(tags.map((tag) => tag.id));
+      const allMessages = [
+        {
+          deleted: false,
+          resolved: false,
+          likes: [],
+          likesCount: 0,
+          created: new Date('2020-12-31'),
+          id: new ObjectID(),
+          text: 'a chat message with tag1',
+          sender: { id: senderId.toHexString() },
+          tags: [{ id: 'tag1', type: TagType.subTopic }],
+        },
+        {
+          deleted: false,
+          resolved: false,
+          likes: [],
+          likesCount: 0,
+          created: new Date('2021-01-01'),
+          id: new ObjectID(),
+          text: 'a chat message with tag2',
+          sender: { id: senderId.toHexString() },
+          tags: [{ id: 'tag2', type: TagType.subTopic }],
+        },
+      ];
+
+      const matchedMessages = allMessages.filter((message) =>
+        message.tags.some((tag) => tagSet.has(tag.id)),
+      );
+
+      return Promise.resolve(matchedMessages);
+    }
+
     updateTags(
       chatMessageId: ObjectID,
       newTags: TagInput[],
@@ -230,6 +268,59 @@ describe('MessageResolver', () => {
 
   it('should be defined', () => {
     expect(resolver).toBeDefined();
+  });
+
+  describe('searchMessagesByTags', () => {
+    it('should search messages matching given tags', async () => {
+      jest.spyOn(messageLogic, 'searchMessagesByTags');
+
+      const searchTagsDto = {
+        tags: [
+          { id: 'tag1', type: TagType.subTopic },
+          { id: 'tag2', type: TagType.subTopic },
+        ],
+      };
+
+      const expectedMessages = [
+        {
+          created: new Date('2020-12-31'),
+          deleted: false,
+          resolved: false,
+          id,
+          likes: [],
+          likesCount: 0,
+          sender: { id: senderId.toHexString() },
+          text: 'a chat message',
+          tags: [{ id: 'tag1', type: TagType.subTopic }],
+        },
+        {
+          created: new Date('2021-01-01'),
+          deleted: false,
+          resolved: false,
+          id: new ObjectID(),
+          likes: [],
+          likesCount: 0,
+          sender: { id: senderId.toHexString() },
+          text: 'another chat message',
+          tags: [{ id: 'tag2', type: TagType.subTopic }],
+        },
+      ];
+
+      jest
+        .spyOn(messageLogic, 'searchMessagesByTags')
+        .mockResolvedValue(expectedMessages);
+
+      const result = await resolver.searchMessagesByTags(
+        searchTagsDto,
+        authenticatedUser,
+      );
+
+      expect(messageLogic.searchMessagesByTags).toBeCalledWith(
+        searchTagsDto.tags,
+        authenticatedUser,
+      );
+      expect(result).toEqual(expectedMessages);
+    });
   });
 
   describe('Update message tags', () => {

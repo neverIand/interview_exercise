@@ -22,6 +22,7 @@ import {
   ResolveMessageDto,
   ReactionDto,
   UpdateMessageTagsDto,
+  SearchTagsDto,
 } from './models/message.dto';
 import { MessageLogic } from './message.logic';
 import {
@@ -61,6 +62,19 @@ export class MessageResolver {
     @AuthenticatedUser() authenticatedUser: IAuthenticatedUser,
   ): Promise<ChatMessage> {
     return await this.messageLogic.create(messageDto, authenticatedUser);
+  }
+
+  // TODO search result may require pagination as well
+  @Query(() => [ChatMessage])
+  @UseGuards(GqlAuthGuard)
+  async searchMessagesByTags(
+    @Args('searchTagsDto') searchTagsDto: SearchTagsDto,
+    @AuthenticatedUser() authenticatedUser: IAuthenticatedUser,
+  ): Promise<ChatMessage[]> {
+    return this.messageLogic.searchMessagesByTags(
+      searchTagsDto.tags,
+      authenticatedUser,
+    );
   }
 
   @Mutation(() => ChatMessage)
