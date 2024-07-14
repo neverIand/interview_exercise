@@ -32,12 +32,18 @@ export class MessageData {
 
     createRichContent(data, chatMessage);
 
+    if (data.tags) {
+      chatMessage.tags = data.tags;
+    }
+
     const dbResult = await chatMessage.save();
+    // console.log('################################### Saved message:', dbResult);
     return chatMessageToObject(dbResult);
   }
 
   async getMessage(messageId: string): Promise<ChatMessageModel> {
     const message = await this.chatMessageModel.findById(messageId);
+    // console.log('################################### Retrieved message:', message);
     if (!message) throw new Error('Message not found');
     return chatMessageToObject(message);
   }

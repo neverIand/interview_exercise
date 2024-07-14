@@ -1,9 +1,17 @@
-import { ObjectType, ID, Field, Float, Directive } from '@nestjs/graphql';
+import {
+  ObjectType,
+  ID,
+  Field,
+  Float,
+  Directive,
+  InputType,
+} from '@nestjs/graphql';
 import { ObjectID } from 'mongodb';
 import { UserField, MessageSender } from '../../user/models/user.model';
 import { ChatConversation } from '../../conversation/models/ChatConversation.entity';
 import { AttachmentType, GifType } from './message.dto';
 import { Reaction } from './message.model';
+import { TagType } from '../../conversation/models/CreateChatConversation.dto';
 
 class ReplyMessageSocket {
   text?: string;
@@ -15,6 +23,24 @@ class ReplyMessageSocket {
   richContent?: RichMessageContent;
 
   deleted?: boolean;
+}
+
+@ObjectType()
+export class Tag {
+  @Field(() => ID)
+  id: string;
+
+  @Field()
+  type: TagType; // TODO for now it uses the same Tag structure with conversation
+}
+
+@InputType()
+export class TagInput {
+  @Field(() => ID)
+  id: string;
+
+  @Field()
+  type: TagType;
 }
 
 @ObjectType()
@@ -148,6 +174,9 @@ export class ChatMessage {
 
   @Field({ defaultValue: false, nullable: true })
   isSenderBlocked?: boolean;
+
+  @Field(() => [Tag], { nullable: true })
+  tags?: Tag[];
 }
 
 /***
@@ -176,6 +205,8 @@ export class SocketChatMessage {
   reactions?: Reaction[];
 
   isSenderBlocked?: boolean;
+
+  tags?: Tag[];
 }
 
 @ObjectType()

@@ -3,6 +3,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ObjectID } from 'mongodb';
 import { AttachmentType, GifType } from './message.dto';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Tag, TagSchema } from './tag.model';
+import { TagType } from '../../conversation/models/CreateChatConversation.dto';
 
 @Schema()
 export class ReplyMessage {
@@ -154,6 +156,10 @@ export class ChatMessageModel {
   })
   reactions?: Reaction[];
 
+  // TODO for now it uses the same Tag structure with conversation
+  @Prop({ type: [TagSchema], _id: false }) 
+  tags?: Tag[];
+
   /**
    * All the properties below are virtual properties
    * @url https://mongoosejs.com/docs/tutorials/virtuals.html
@@ -202,5 +208,6 @@ export function chatMessageToObject(
     ...parsed,
     id: new ObjectID(parsed.id),
     text: maskDeletedMessageText(parsed.deleted, parsed.text),
+    tags: parsed.tags,
   };
 }

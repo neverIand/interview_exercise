@@ -329,4 +329,6 @@ describe('Message', () => {
       });
     });
   });
+
+  // TODO add tags and update tags for messages
 });

@@ -659,7 +659,7 @@ describe('MessageLogic', () => {
         jest.spyOn(messageData, 'create');
 
         await messageLogic.create(
-          { text: 'This is my message text', conversationId /* tags */ },
+          { text: 'This is my message text', conversationId, tags },
           { ...validUser, userId: senderId },
         );
 
@@ -677,7 +677,7 @@ describe('MessageLogic', () => {
           likes: [],
           likesCount: 0,
           isSenderBlocked: false,
-          // tags,
+          tags,
         });
 
         expect(safeguardingService.clean).toHaveBeenCalledTimes(1);
