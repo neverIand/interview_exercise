@@ -36,7 +36,10 @@ describe('Direct Conversation Block User Functionality', () => {
 
   it('Prior to block the user can send message', async () => {
     await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).reset();
-    await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).mockSimpleResponse(
+    await mockServerClient(
+      process.env.MOCK_USER_SERVICE ?? '',
+      1080,
+    ).mockSimpleResponse(
       `/api/v1/users/${userToConverseWith}`,
       {
         id: userToConverseWith,
@@ -109,7 +112,10 @@ describe('Direct Conversation Block User Functionality', () => {
 
   it('successfully executes unblock request for the user', async () => {
     await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).reset();
-    await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).mockSimpleResponse(
+    await mockServerClient(
+      process.env.MOCK_USER_SERVICE ?? '',
+      1080,
+    ).mockSimpleResponse(
       `/api/v1/users/${userToConverseWith}`,
       {
         id: userToConverseWith,

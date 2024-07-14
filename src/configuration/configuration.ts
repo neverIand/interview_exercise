@@ -42,7 +42,6 @@ function getEnvInt(name: string, defaultValue: number): number {
   const value = getEnv(name);
 
   if (value === undefined) {
-
     return defaultValue;
   }
   if (typeof value === 'number') {

@@ -8,14 +8,8 @@ import {
 export function getLocalConfig(): Configuration {
   return {
     auth: {
-      jwtSecret: getEnv(
-        'JWT_SECRET_KEY',
-        'ssssh',
-      ),
-      apiKeyForClients: getEnv(
-        'API_KEY_FOR_CLIENT',
-        'ssssh',
-      ),
+      jwtSecret: getEnv('JWT_SECRET_KEY', 'ssssh'),
+      apiKeyForClients: getEnv('API_KEY_FOR_CLIENT', 'ssssh'),
     },
     database: {
       connectionString: getEnv(

@@ -38,7 +38,10 @@ describe('Conversation', () => {
   let conversationId: string;
 
   beforeAll(async () => {
-    await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).mockSimpleResponse(
+    await mockServerClient(
+      process.env.MOCK_USER_SERVICE ?? '',
+      1080,
+    ).mockSimpleResponse(
       `/api/v1/users/${userId}`,
       {
         id: userId,
@@ -129,7 +132,10 @@ describe('Conversation', () => {
   const secondUser = `${new ObjectId()}`;
 
   it('allows a second user to be added to a community', async () => {
-    await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).mockSimpleResponse(
+    await mockServerClient(
+      process.env.MOCK_USER_SERVICE ?? '',
+      1080,
+    ).mockSimpleResponse(
       `/api/v1/users/${secondUser}`,
       {
         id: secondUser,
@@ -161,7 +167,10 @@ describe('Conversation', () => {
   });
 
   it('allows a user to be removed from a community', async () => {
-    await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).mockSimpleResponse(
+    await mockServerClient(
+      process.env.MOCK_USER_SERVICE ?? '',
+      1080,
+    ).mockSimpleResponse(
       `/api/v1/users/${secondUser}`,
       {
         id: secondUser,

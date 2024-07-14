@@ -13,7 +13,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') implements CanActivate {
     try {
       result = (await super.canActivate(context)) as boolean;
     } catch (e) {
-      console.log(e)
+      console.log(e);
       throw new AuthenticationError('UNAUTHENTICATED');
     }
     return Promise.resolve(result);

@@ -67,7 +67,10 @@ describe('Unread Message Count', () => {
       },
     };
     anotherClient = createClient(toSignAnother);
-    await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).mockSimpleResponse(
+    await mockServerClient(
+      process.env.MOCK_USER_SERVICE ?? '',
+      1080,
+    ).mockSimpleResponse(
       `/api/v1/users/${thisUser}`,
       {
         id: thisUser,
@@ -77,7 +80,10 @@ describe('Unread Message Count', () => {
       },
       200,
     );
-    await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).mockSimpleResponse(
+    await mockServerClient(
+      process.env.MOCK_USER_SERVICE ?? '',
+      1080,
+    ).mockSimpleResponse(
       `/api/v1/users/${anotherUser}`,
       {
         id: anotherUser,

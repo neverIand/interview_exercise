@@ -35,7 +35,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: IUBJwt): Promise<IAuthenticatedUser> {
     const { identity } = payload;
-    console.log({identity})
+    console.log({ identity });
     return {
       userId: new ObjectID(identity.user_id),
       accountRole: identity.account_role,

@@ -19,7 +19,7 @@ describe('Block User Functionality', () => {
   let client: GraphQLClient;
   let conversation1: ChatConversation;
   let conversation2: ChatConversation;
-  const blockedMemberId =  String(new ObjectID());
+  const blockedMemberId = String(new ObjectID());
 
   beforeAll(async () => {
     const baseArgs = {
@@ -36,8 +36,10 @@ describe('Block User Functionality', () => {
       },
     };
 
-
-    await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).mockSimpleResponse(
+    await mockServerClient(
+      process.env.MOCK_USER_SERVICE ?? '',
+      1080,
+    ).mockSimpleResponse(
       `/api/v1/users/${blockedMemberId}`,
       {
         id: blockedMemberId,
@@ -62,7 +64,6 @@ describe('Block User Functionality', () => {
     }
 
     client = createClient(toSign);
-
   });
 
   it('Prior to block the user can send message', async () => {

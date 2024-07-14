@@ -59,7 +59,6 @@ export class AbilityFactory {
       context,
     } = conversation;
 
-
     const userBlockScopes: UserBlockScope[] = getUniversityContexts(
       context,
     ).map((currentContext) => ({

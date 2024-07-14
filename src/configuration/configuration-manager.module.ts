@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
-import {
-  Configuration,
-} from './configuration';
+import { Configuration } from './configuration';
 import { ConfigurationManager } from './configuration-manager';
 import { getLocalConfig } from './configuration-manager.utils';
 
 export async function loadConfig(): Promise<Configuration> {
   // Local config
-    return getLocalConfig();
+  return getLocalConfig();
 }
 
 const configProvider = {

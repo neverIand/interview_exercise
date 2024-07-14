@@ -21,8 +21,8 @@ Note to self: Remember to update the mock implementation as well
     - TODO? could use `joi` for validation? (it's in dependency)
 
 2. A function that allows users to update (including add/delete) tags for a message after it's created
-    - create new unit tests for updating message tags: resolver, logic (done), data layer (done)
-    - create updateTags function in resolver, logic (done), data layer (done)
+    - create new unit tests for updating message tags: resolver, logic, data layer
+    - create updateTags function in resolver, logic, data layer
 
 3. A function that returns messages that matches the given tags
     - TODO

@@ -27,15 +27,17 @@ describe('sockets service with sendPusherMessages true', () => {
       controllers: [],
       providers: [
         SocketsService,
-        { provide: ConfigurationManager, useFactory: () =>
-          new MockedConfigurationManager({
-            pusher: {
-              secretKey: '1',
-              appId: '1',
-              key: '1',
-              sendPusherMessages: true,
-            },
-          }), 
+        {
+          provide: ConfigurationManager,
+          useFactory: () =>
+            new MockedConfigurationManager({
+              pusher: {
+                secretKey: '1',
+                appId: '1',
+                key: '1',
+                sendPusherMessages: true,
+              },
+            }),
         },
       ],
     }).compile();
@@ -140,8 +142,7 @@ describe('channel', () => {
   }
 
   class MockedSocketsService implements ISocketsService {
-    send(data: PusherTypes): void {
-    }
+    send(data: PusherTypes): void {}
     getFormattedName(channelName: string, isPrivate: boolean): string {
       return `${channelName}-${isPrivate}`;
     }

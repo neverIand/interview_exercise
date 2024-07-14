@@ -564,9 +564,11 @@ describe('AbilityFactory', () => {
     });
 
     it('should return empty permissions array if user is blocked', async () => {
-      jest.spyOn(userBlocksLogic, 'isUserBlocked').mockImplementation(async () => {
-        return true
-      });
+      jest
+        .spyOn(userBlocksLogic, 'isUserBlocked')
+        .mockImplementation(async () => {
+          return true;
+        });
 
       const ability = await abilityFactory.factory(
         mockUser,

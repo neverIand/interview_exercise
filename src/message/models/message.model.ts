@@ -157,7 +157,7 @@ export class ChatMessageModel {
   reactions?: Reaction[];
 
   // TODO for now it uses the same Tag structure with conversation
-  @Prop({ type: [TagSchema], _id: false }) 
+  @Prop({ type: [TagSchema], _id: false })
   tags?: Tag[];
 
   /**

@@ -5,7 +5,6 @@ import { PermissionsService } from './permissions.service';
 import { AbilityFactory } from './ability-factory';
 import { UserBlocksModule } from '../user-blocks/user-blocks.module';
 @Module({
-  
   imports: [
     forwardRef(() => ConversationModule),
     forwardRef(() => MessageModule),

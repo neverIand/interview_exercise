@@ -161,7 +161,7 @@ export class MessageLogic implements IMessageLogic {
 
   private cleanMessageTags(tags: Tag[] | undefined): Tag[] | undefined {
     if (!tags) return undefined;
-    
+
     return tags.reduce<Tag[]>((cleanedTags, tag) => {
       const cleanedId = this.safeguardingService.cleanTagId(tag.id);
       if (cleanedId) {
@@ -735,9 +735,6 @@ export class MessageLogic implements IMessageLogic {
     message.tags = newTags;
 
     // Save the updated message
-    return await this.messageData.updateTags(
-      chatMessageId,
-      newTags,
-    );
+    return await this.messageData.updateTags(chatMessageId, newTags);
   }
 }

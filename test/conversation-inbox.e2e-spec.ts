@@ -58,7 +58,10 @@ async function addUserToConversation(
 }
 
 async function addBenToConversation(userId: string) {
-  await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).mockSimpleResponse(
+  await mockServerClient(
+    process.env.MOCK_USER_SERVICE ?? '',
+    1080,
+  ).mockSimpleResponse(
     `/api/v1/users/${userId}`,
     {
       id: userId,

@@ -17,11 +17,7 @@ import { UserBlocksController } from './user-blocks.controller';
     forwardRef(() => ConversationModule),
   ],
   controllers: [UserBlocksController],
-  providers: [
-    ConfigService,
-    UserBlocksData,
-    UserBlocksLogic,
-  ],
+  providers: [ConfigService, UserBlocksData, UserBlocksLogic],
   exports: [UserBlocksLogic],
 })
 export class UserBlocksModule {}

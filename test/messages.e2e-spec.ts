@@ -38,7 +38,10 @@ describe('Message', () => {
       },
     });
 
-    await mockServerClient(process.env.MOCK_USER_SERVICE ?? '', 1080).mockSimpleResponse(
+    await mockServerClient(
+      process.env.MOCK_USER_SERVICE ?? '',
+      1080,
+    ).mockSimpleResponse(
       `/api/v1/users/${dummyUserId}`,
       {
         id: dummyUserId,
