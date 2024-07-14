@@ -435,6 +435,8 @@ describe('MessageLogic', () => {
 
   class MockedSafeguardingService {
     clean = jest.fn().mockReturnValue('clean message');
+
+    cleanTagId = jest.fn((tag) => tag);
   }
 
   class MockedConversationData {
@@ -681,6 +683,9 @@ describe('MessageLogic', () => {
         });
 
         expect(safeguardingService.clean).toHaveBeenCalledTimes(1);
+        expect(safeguardingService.cleanTagId).toHaveBeenCalledTimes(
+          tags.length,
+        );
         expect(safeguardingService.clean).toBeCalledWith('Message 1');
 
         expect(conversationChannel.send).toHaveBeenCalledWith(

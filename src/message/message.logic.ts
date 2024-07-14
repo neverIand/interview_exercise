@@ -4,6 +4,8 @@ import {
   PaginatedChatMessages,
   PollOption,
   RichMessageContent,
+  Tag,
+  TagInput,
 } from './models/message.entity';
 import {
   MessageDto,
@@ -108,9 +110,12 @@ export class MessageLogic implements IMessageLogic {
 
     const { userId, accountRole } = authenticatedUser;
 
+    // Clean the tags before creating the message
+    const cleanedTags = this.cleanMessageTags(messageDto.tags);
+    
     const conversationId = messageDto.conversationId.toHexString();
     const [message, sender, conversation] = await Promise.all([
-      this.messageData.create(messageDto, userId),
+      this.messageData.create({ ...messageDto, tags: cleanedTags }, userId),
       this.userService.getUser(userId.toHexString()),
       this.conversationData.getConversation(conversationId),
     ]);
@@ -145,13 +150,25 @@ export class MessageLogic implements IMessageLogic {
       richContent: await this.mapRichContent(messageDto, message),
       resolved: message.resolved,
       isSenderBlocked: false,
-      tags: messageDto.tags,
+      tags: cleanedTags,
     });
 
     this.conversationChannel.send(sendMessageEvent, conversationId);
     sender.accountRole = accountRole;
 
     return message;
+  }
+
+  private cleanMessageTags(tags: Tag[] | undefined): Tag[] | undefined {
+    if (!tags) return undefined;
+    
+    return tags.reduce<Tag[]>((cleanedTags, tag) => {
+      const cleanedId = this.safeguardingService.cleanTagId(tag.id);
+      if (cleanedId) {
+        cleanedTags.push({ ...tag, id: cleanedId });
+      }
+      return cleanedTags;
+    }, []);
   }
 
   private async mapRichContent(
