@@ -24,8 +24,12 @@ Note to self: Remember to update the mock implementation as well
     - create new unit tests for updating message tags: resolver, logic, data layer
     - create updateTags function in resolver, logic, data layer
 
-3. A function that returns messages that matches the given tags
-    - TODO
+3. A function that returns messages that matches the given tags (WIP)
+    - unit tests for getting messages that match provided tags - resolver, logic, data layer
+    - tests for getting conversations by tags
+    - update permission service
+    - update resolver, logic, data
+
 
 
 ## Testing:
