@@ -150,7 +150,7 @@ export class MessageLogic implements IMessageLogic {
       richContent: await this.mapRichContent(messageDto, message),
       resolved: message.resolved,
       isSenderBlocked: false,
-      tags: cleanedTags,
+      tags: cleanedTags, // TODO? remove duplicate tags
     });
 
     this.conversationChannel.send(sendMessageEvent, conversationId);

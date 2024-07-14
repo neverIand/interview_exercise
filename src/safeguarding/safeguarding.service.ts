@@ -44,7 +44,7 @@ export class SafeguardingService {
     cleanedTagId = cleanedTagId.slice(0, maxLength);
 
     const badWordsRegex = new RegExp(badWords.array.join('|'), 'gi');
-    cleanedTagId = cleanedTagId.replace(badWordsRegex, '');
+    cleanedTagId = cleanedTagId.replace(badWordsRegex, '🤬');
 
     // Remove any leading or trailing hyphens or underscores
     cleanedTagId = cleanedTagId.replace(/^[-_]+|[-_]+$/g, '');
