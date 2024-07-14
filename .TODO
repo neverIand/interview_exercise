@@ -10,6 +10,8 @@ For now, these are the MVP features, there will be much more in terms of future 
 
 ## Possible implementation needed:
 
+Note to self: Remember to update the mock implementation as well
+
 1. Update the function that creates messages for enabling tags creation
     - create new unit tests for creating new messages
     - add tags to database schema and type definition

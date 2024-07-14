@@ -15,7 +15,11 @@ import {
 } from './models/message.dto';
 import { ObjectID } from 'mongodb';
 import { IAuthenticatedUser } from '../authentication/jwt.strategy';
-import { ChatMessage, PaginatedChatMessages } from './models/message.entity';
+import {
+  ChatMessage,
+  PaginatedChatMessages,
+  TagInput,
+} from './models/message.entity';
 import { SafeguardingService } from '../safeguarding/safeguarding.service';
 import {
   ChatMessageDataLoader,
@@ -25,6 +29,7 @@ import {
   MessagesFilterInput,
   MessageGroupedByConversationOutput,
 } from '../conversation/models/messagesFilterInput';
+import { TagType } from '../conversation/models/CreateChatConversation.dto';
 
 const conversationId = new ObjectID('5fe0cce861c8ea54018385af');
 const messageId = new ObjectID('5fe0cce861c8ea54018386ab');
@@ -106,6 +111,7 @@ describe('MessageResolver', () => {
       return Promise.resolve({
         ...chatMessage,
         text: messageDto.text,
+        tags: messageDto.tags,
       });
     }
 
@@ -195,6 +201,14 @@ describe('MessageResolver', () => {
     ): Promise<MessageGroupedByConversationOutput[]> {
       return Promise.resolve([]);
     }
+
+    updateTags(
+      chatMessageId: ObjectID,
+      newTags: TagInput[],
+      authenticatedUser: IAuthenticatedUser,
+    ): Promise<ChatMessage> {
+      return Promise.resolve({ ...chatMessage, tags: newTags });
+    }
   }
 
   beforeEach(async () => {
@@ -216,6 +230,27 @@ describe('MessageResolver', () => {
 
   it('should be defined', () => {
     expect(resolver).toBeDefined();
+  });
+
+  describe('Update message tags', () => {
+    it('should update tags of a message', () => {
+      jest.spyOn(messageLogic, 'updateTags');
+
+      const messageTagsUpdateDto = {
+        messageId,
+        tags: [
+          { id: 'tag2', type: TagType.subTopic },
+          { id: 'tag3', type: TagType.subTopic },
+        ],
+      };
+
+      resolver.updateMessageTags(messageTagsUpdateDto, authenticatedUser);
+      expect(messageLogic.updateTags).toBeCalledWith(
+        messageTagsUpdateDto.messageId,
+        messageTagsUpdateDto.tags,
+        authenticatedUser,
+      );
+    });
   });
 
   describe('sendConversationMessage', () => {
