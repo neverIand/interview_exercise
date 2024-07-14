@@ -14,6 +14,7 @@ For now, these are the MVP features, there will be much more in terms of future 
     - create a new unit test for creating new messages
     - add tags to database schema and type definition
     - for now, use the same data structure with conversation
+    - TODO: message reply has the same tags?
     - could use `joi` for validation? (it's in dependency)
 
 2. A function that allows users to update (including add/delete) tags for a message after it's created

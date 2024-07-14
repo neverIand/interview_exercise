@@ -1497,4 +1497,41 @@ describe('MessageLogic', () => {
       ).rejects.toEqual(expectedError);
     });
   });
+
+  describe('updateTags', () => {
+    it('should be defined', () => {
+      expect(messageLogic.updateTags).toBeDefined();
+    });
+
+    it('should be able to update tags', async () => {
+      const mockMessage = {
+        text: 'Hello world',
+        senderId,
+        conversationId,
+        created: new Date('2018-05-11T17:47:40.893Z'),
+        sender: { id: '5fe0cce861c8ea54018385af' },
+        conversation: { id: '5fe0cce861c8ea54018385ae' },
+        id: messageId,
+        deleted: false,
+        resolved: false,
+        likes: [],
+        likesCount: 0,
+        tags: [{ id: 'tag1', type: TagType.subTopic }],
+      };
+
+      jest
+        .spyOn(messageData, 'getMessage')
+        .mockReturnValue(Promise.resolve(mockMessage));
+      jest.spyOn(messageData, 'updateTags');
+
+      const newTags = [
+        { id: 'tag2', type: TagType.subTopic },
+        { id: 'tag3', type: TagType.subTopic },
+      ];
+
+      await messageLogic.updateTags(messageId, newTags, validUser);
+
+      expect(messageData.updateTags).toHaveBeenCalledWith(messageId, newTags);
+    });
+  });
 });
