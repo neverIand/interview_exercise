@@ -12,7 +12,7 @@ import {
   TagInput,
 } from './models/message.entity';
 import { MessageDto, GetMessageDto } from './models/message.dto';
-import { ObjectID } from 'mongodb';
+import { ObjectID, ObjectId } from 'mongodb';
 import { createRichContent } from './utils/message.helper';
 import { MessageGroupedByConversationOutput } from '../conversation/models/messagesFilterInput';
 
@@ -375,6 +375,13 @@ export class MessageData {
     }
 
     return chatMessageToObject(updatedResult);
+  }
+
+  async searchMessagesByTags(
+    tags: TagInput[],
+    userId: ObjectID,
+  ): Promise<ChatMessage[]> {
+    return [];
   }
 
   async updateTags(

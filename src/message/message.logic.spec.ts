@@ -8,6 +8,7 @@ import {
   GifType,
   MessageDto,
   PollDto,
+  SearchTagsDto,
 } from './models/message.dto';
 import {
   ConversationChannel,
@@ -415,6 +416,36 @@ describe('MessageLogic', () => {
       return Promise.resolve(
         this.getMockMessage(messageId.toHexString(), userId.toHexString()),
       );
+    }
+
+    searchMessagesByTags(
+      tags: TagInput[],
+      authenticatedUser: IAuthenticatedUser,
+    ) {
+      return [
+        {
+          id: new ObjectID().toHexString(),
+          text: 'a chat message with tag1',
+          created: new Date('2020-12-31'),
+          sender: { id: senderId.toHexString() },
+          deleted: false,
+          resolved: false,
+          likes: [],
+          likesCount: 0,
+          tags: [{ id: 'tag1', type: TagType.subTopic }],
+        },
+        {
+          id: new ObjectID().toHexString(),
+          text: 'a chat message with tag2',
+          created: new Date('2021-01-01'),
+          sender: { id: senderId.toHexString() },
+          deleted: false,
+          resolved: false,
+          likes: [],
+          likesCount: 0,
+          tags: [{ id: 'tag2', type: TagType.subTopic }],
+        },
+      ];
     }
 
     updateTags(messageId: ObjectId, newTags: TagInput[]) {
@@ -1511,6 +1542,58 @@ describe('MessageLogic', () => {
       await expect(
         messageLogic.removeVote(messageId, option, validUser),
       ).rejects.toEqual(expectedError);
+    });
+  });
+
+  // TODO test case for find messages by tags
+  describe('searchMessagesByTags', () => {
+    it('should throw if user is not authenticated', async () => {
+      jest
+        .spyOn(permissionsService, 'conversationPermissions')
+        .mockImplementationOnce(() => {
+          return Promise.resolve(false);
+        });
+
+      const searchTagsDto: SearchTagsDto = {
+        tags: [{ id: 'tag1', type: TagType.subTopic }],
+      };
+      const unauthorisedUser: IAuthenticatedUser = {
+        ...validUser,
+        userId: UNAUTHORISED_USER,
+      };
+
+      await expect(
+        messageLogic.searchMessagesByTags(searchTagsDto.tags, unauthorisedUser),
+      ).rejects.toThrow('User is not authorised to read these messages');
+    });
+
+    it('should return messages matching given tags', async () => {
+      const searchTagsDto: SearchTagsDto = {
+        tags: [{ id: 'tag1', type: TagType.subTopic }],
+      };
+
+      const result = await messageLogic.searchMessagesByTags(
+        searchTagsDto.tags,
+        validUser,
+      );
+
+      expect(result).toHaveLength(1);
+      expect(result[0].tags).toEqual(
+        expect.arrayContaining([{ id: 'tag1', type: TagType.subTopic }]),
+      );
+    });
+
+    it('should return empty array when no messages match the given tags', async () => {
+      const searchTagsDto = {
+        tags: [{ id: 'nonexistent', type: TagType.subTopic }],
+      };
+
+      const result = await messageLogic.searchMessagesByTags(
+        searchTagsDto.tags,
+        validUser,
+      );
+
+      expect(result).toHaveLength(0);
     });
   });
 

@@ -714,11 +714,27 @@ export class MessageLogic implements IMessageLogic {
     return pollOption;
   }
 
+  // TODO pagination
   async searchMessagesByTags(
     tags: TagInput[],
     authenticatedUser: IAuthenticatedUser,
-  ) {
-    return [];
+  ):Promise<ChatMessage[]> {
+    // Check if the user is authorized to search messages
+    const isAuthorized = await this.permissions.conversationPermissions({ // TODO a permission for tags
+      user: authenticatedUser,
+      tags, // TODO
+      action: Action.readConversation,
+    });
+
+    if (!isAuthorized) {
+      throw new ForbiddenError(`User is not authorised to read these messages`);
+    }
+
+    // Retrieve messages matching the given tags
+    const matchingMessages = await this.messageData.searchMessagesByTags(tags, authenticatedUser.userId);
+
+    return matchingMessages;
+    // return [];
   }
 
   async updateTags(
