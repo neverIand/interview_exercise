@@ -8,10 +8,10 @@ For now, these are the MVP features, there will be much more in terms of future 
 2. Update a tag/tags of an existing message
 3. Search for messages that matches given tags
 
-## Possible implementation needed (TODO: steps to take):
+## Possible implementation needed:
 
 1. Update the function that creates messages for enabling tags creation
-    - create a new unit test for creating new messages
+    - create new unit tests for creating new messages
     - add tags to database schema and type definition
     - for now, use the same data structure with conversation
     - TODO? Remove tags with duplicate id
@@ -19,8 +19,12 @@ For now, these are the MVP features, there will be much more in terms of future 
     - TODO? could use `joi` for validation? (it's in dependency)
 
 2. A function that allows users to update (including add/delete) tags for a message after it's created
+    - create new unit tests for updating message tags: resolver, logic (done), data layer (done)
+    - create updateTags function in resolver, logic (done), data layer (done)
 
 3. A function that returns messages that matches the given tags
+    - TODO
+
 
 ## Testing:
 
